@@ -3,9 +3,5 @@ node_js:
   - "6"
   - "6.1"
 
-addons:
-  code_climate:
-    repo_token: 2b615ab125517cfd27bcc652415cf4788c88d687636b6cbfd60c82450eb21cc4
-
 after_success:
-  - codeclimate-test-reporter < lcov.info
+  - bash <(curl -s https://codecov.io/bash)
