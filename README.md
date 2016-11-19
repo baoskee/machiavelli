@@ -1,4 +1,6 @@
 # machiavelli
+https://travis-ci.org/baoskee/machiavelli.svg?branch=master
+
 Lightweight application-level schema for Javascript models.
 
 ## Why not Mongoose or another ORM
