@@ -21,7 +21,7 @@ var postingSchema = new Schema({
 });
 ```
 
-# Synchronous validation
+### Synchronous validation
 ```
 var posting = { title: 'Old windows mouse', price: 20 };
 if (postingSchema.isValid(posting)) {
@@ -31,7 +31,7 @@ if (postingSchema.isValid(posting)) {
 }
 ```
 
-# Asynchronous validation
+### Asynchronous validation
 ```
 postingSchema.validate(posting, function (err) {
     if (err) {
@@ -42,7 +42,7 @@ postingSchema.validate(posting, function (err) {
 });
 ```
 
-# Custom validators 
+### Custom validators 
 ```
 var is_positive = function (price) { return price >= 0; };
 var coffeeSchema = new Schema({
@@ -51,7 +51,7 @@ var coffeeSchema = new Schema({
 });
 ```
 
-# Schema inheritance
+### Schema inheritance
 The inherits method need to be declared after schema declaration. 
 Will not overwrite existing fields, but will inherit validation 
 requirements of other fields.
