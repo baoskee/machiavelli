@@ -15,7 +15,7 @@ ORM, we are adhering to the Node.js philosophy of modularization.
 
 ## Getting Started
 
-```
+```javascript
 var Schema = require('machiavelli').Schema
 var postingSchema = new Schema({
     title: { type: 'string', required: true },
@@ -25,7 +25,7 @@ var postingSchema = new Schema({
 ```
 
 ### Synchronous validation
-```
+```javascript
 var posting = { title: 'Old windows mouse', price: 20 };
 if (postingSchema.isValid(posting)) {
     /* save posting to database */
@@ -35,7 +35,7 @@ if (postingSchema.isValid(posting)) {
 ```
 
 ### Asynchronous validation
-```
+```javascript
 postingSchema.validate(posting, function (err) {
     if (err) {
         /* handle error */
@@ -46,7 +46,7 @@ postingSchema.validate(posting, function (err) {
 ```
 
 ### Custom validators 
-```
+```javascript
 var is_positive = function (price) { return price >= 0; };
 var coffeeSchema = new Schema({
     flavor: { type: 'string', required: true },
@@ -59,7 +59,7 @@ The inherits method need to be declared after schema declaration.
 Will not overwrite existing fields, but will inherit validation 
 requirements of other fields.
 
-```
+```javascript
 var ticketSchema = new Schema({ 
     artist: { type: 'string', required: 'true' }
 });
