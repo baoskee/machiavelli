@@ -4,6 +4,7 @@
 
 Lightweight application-level schema for Javascript models.
 
+
 ## Why not Mongoose or another ORM
 ORMs don't cover completely the features that the Official Node.js 
 Driver have. Many ORMs, Mongoose in particular, are slow vs. the 
@@ -40,7 +41,7 @@ postingSchema.validate(posting, function (err) {
     if (err) {
         /* handle error */
     } else {
-        /* save posting to database
+        /* save posting to database */
     }
 });
 ```
@@ -61,7 +62,7 @@ requirements of other fields.
 
 ```javascript
 var ticketSchema = new Schema({ 
-    artist: { type: 'string', required: 'true' }
+    artist: { type: 'string', required: true }
 });
 ticketSchema.inherits(postingSchema);
 ```
@@ -71,7 +72,38 @@ ticketSchema.inherits(postingSchema);
 Light-weight schemas can provide another protection layer for malicious
 database injections.
 
+## Using Schema in Express middleware for modularizing logic
+```javascript
+var app = require('express')();
+var authenticationSchema = new Schema({
+  username: { type: 'string', required: true },
+  password: { type: 'string', required: true }
+});
+
+/*
+ * Middleware to check validity of input,
+ * allow customization of error message and
+ * status code for each type of failure
+ */ 
+ 
+app.use(function (err, req, res, next) {
+  authenticationSchema.validate({ 
+    username: req.body.username,
+    password: req.body.password
+  }, function (err) {
+    if (err) return res.status(401).json({
+      type: 'validation_error',
+      message: err
+    });
+
+    next();
+  });
+});
+```
+
 ## Future contribution ideas
-1. More specific types, like Date, Integer
+1. More specific types, like Date, Integer.
 2. More tests, please.
 3. Custom error messages for custom validator functions.
+4. Custom error messages for required validation.
+5. Custom error messages for type validation.
