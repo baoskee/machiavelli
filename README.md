@@ -17,14 +17,17 @@ database schemas can be advantageous; data can be validated  directly
 from your application instead of unnecessarily over network requests.
 
 ## Getting Started
+Don't be disheartened by all the constructors, they are there to 
+modularize the logic and allow easy implementation of nested 
+validation.
 
 ```javascript
 var Schema = require('machiavelli').Schema
 var Field = Schema.Field;
 var postingSchema = new Schema({
-    title: new Field({ type: 'string', required: true }),
-    price: new Field({ type: 'number', required: true }),
-    description: new Field({ type: 'string' })s
+    title: new Field({ type: String, required: true }),
+    price: new Field({ type: Number, required: true }),
+    description: new Field({ type: String })
 });
 ```
 
@@ -56,7 +59,7 @@ requirements of other fields.
 
 ```javascript
 var ticketSchema = new Schema({ 
-    artist: new Field({ type: 'string' })
+    artist: new Field({ type: String })
 });
 ticketSchema.inherits(postingSchema);
 ```
@@ -65,8 +68,8 @@ ticketSchema.inherits(postingSchema);
 A schema can be extended with new fields using the method addField() 
 ```javascript
 ticketSchema.addField({
-    venue: new Field({ type: 'string', required: false }), 
-    anotherField: new Field({ type: 'number' })
+    venue: new Field({ type: String, required: false }), 
+    anotherField: new Field({ type: Number })
 });
 ```
 
@@ -102,17 +105,10 @@ var ticketSchema = new Schema({
 * Array
 
 ### Defining new data types
-Defining new dataType from MongoDB's ObjectID. Simply define a function
-that returns true if object is of type data type, else returns false.
+Simply define a function that returns true if object is of type data 
+type, else returns false. Here we define a new DataType called 
+Coordinate.
 
-```javascript
-var ObjectID = require('mongodb').ObjectID;
-DataType.ObjectID = new DataType(function (val) {
-    return val instanceof ObjectID;
-}); 
-```
-
-Here we define a new DataType called Coordinate.
 ```javascript
 DataType.Coordinate = new DataType(function (coord) {
     var longitude = coord[0];
@@ -122,6 +118,10 @@ DataType.Coordinate = new DataType(function (coord) {
         (latitude >= -90 && latitude <= 90)
 });
 ```
+
+### Your own wrappers
+If your data is already wrapped in your own constructor, there
+is no need to define a new function. 
 
 ## Error Types (To be implemented)
 The Schema comes with flexible error messages, customizable from
@@ -139,16 +139,19 @@ if Schema should fail if the field is not specified. Specifying the
 default is set to true. There are many other arguments we could use to
 enhance our schema.
 
-### validate - Custom validators 
+### validate - Custom validators
+The argument to 'validate' should always be in an array, even if it
+only contains one element. 
+
 Functions specified under the validate argument should return a boolean
 that specifies whether or not the data is valid. Custom validators can 
-be objects of form { validator: Function, message: String } instead of 
-functions.
+be made by the Validator constructor which takes in arguments isValid
+as your validation function and message as your error message. 
 
 ```javascript
 var isPositive = function (price) { return price >= 0; };
 var smallerThanTen = new Validator({ 
-    validator: function(price) { return price < 10 },
+    isValid: function(price) { return price < 10 },
     message: 'Value not smaller than 10'
 });
 
