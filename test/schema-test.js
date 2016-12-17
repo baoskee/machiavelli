@@ -50,17 +50,17 @@ describe('Schema', function () {
   var userSchema, postingSchema, ticketSchema;
   before(function (done) {
     userSchema = new Schema({
-      username: { type: 'string', required: true },
-      password: { type: 'string', required: true },
+      username: { type: 'string' },
+      password: { type: 'string' },
       email: { type: 'string', required: true }
     });
     postingSchema = new Schema({
-      title: { type: 'string', required: true },
-      price: { type: 'number', required: true, validate: [is_positive] },
-      description: { type: 'string' }
+      title: { type: 'string' },
+      price: { type: 'number', validate: [is_positive] },
+      description: { type: 'string', required: false }
     });
     ticketSchema = new Schema({
-      artist: { type: 'string', required: true }
+      artist: { type: 'string' }
     });
     ticketSchema.inherits(postingSchema);
     done();
