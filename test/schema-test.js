@@ -1,6 +1,5 @@
-const
-  assert = require('assert'),
-  Schema = require('../lib/machiavelli').Schema;
+var assert = require('assert');
+var Schema = require('../index').Schema;
 
 describe('Schema', function () {
   const ErrorMessage = {

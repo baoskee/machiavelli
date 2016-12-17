@@ -1,3 +1,6 @@
 'use strict';
 
-module.exports = require('./lib/machiavelli');
+var machiavelli = {};
+machiavelli.Schema = require('./lib/schema');
+
+module.exports = machiavelli;
