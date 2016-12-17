@@ -146,19 +146,20 @@ only contains one element.
 Functions specified under the validate argument should return a boolean
 that specifies whether or not the data is valid. Custom validators can 
 be made by the Validator constructor which takes in arguments isValid
-as your validation function and message as your error message. 
+as your validation function and error  as your error throwing object. 
 
 ```javascript
 var isPositive = function (price) { return price >= 0; };
 var smallerThanTen = new Validator({ 
     isValid: function(price) { return price < 10 },
-    message: 'Value not smaller than 10'
+    error: new Error('Value not smaller than 10')
 });
 
 var coffeeSchema = new Schema({
-    flavor: new Field({ type: 'string', required: true }),
+    flavor: new Field({ type: String, required: true }),
     price: new Field({ 
-        type: new Field('number', required: true), 
+        type: Number,
+        required: true,
         validate: [isPostive, smallerThanTen] 
     });
 });
