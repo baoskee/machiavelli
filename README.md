@@ -33,8 +33,8 @@ var postingSchema = new Schema({
 
 ### Synchronous validation
 ```javascript
-var posting = { title: 'Old windows mouse', price: 20 };
-if (postingSchema.isValid(posting)) {
+var postingDocument = { title: 'Old windows mouse', price: 20 };
+if (postingSchema.isValid(postingDocument)) {
     /* save posting to database */
 } else {
     /* handle error */ 
@@ -163,6 +163,12 @@ var coffeeSchema = new Schema({
     });
 });
 ```
+
+## Philosophy
+Why so many constructors? While JavaScript is a dynamically-typed 
+language, it can be extremely beneficial to separate concerns by
+using constructors as dependency injections. Hacking JavaScript
+can be both fast AND reliable!
 
 ## Future contribution ideas
 1. Validation of nested objects.
