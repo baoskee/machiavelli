@@ -20,10 +20,11 @@ from your application instead of unnecessarily over network requests.
 
 ```javascript
 var Schema = require('machiavelli').Schema
+var Field = Schema.Field;
 var postingSchema = new Schema({
-    title: { type: 'string', required: true },
-    price: { type: 'number', required: true },
-    description: { type: 'string' }
+    title: new Field({ type: 'string', required: true }),
+    price: new Field({ type: 'number', required: true }),
+    description: new Field({ type: 'string' })s
 });
 ```
 
@@ -55,7 +56,7 @@ requirements of other fields.
 
 ```javascript
 var ticketSchema = new Schema({ 
-    artist: { type: 'string' }
+    artist: new Field({ type: 'string' })
 });
 ticketSchema.inherits(postingSchema);
 ```
@@ -64,8 +65,8 @@ ticketSchema.inherits(postingSchema);
 A schema can be extended with new fields using the method addField() 
 ```javascript
 ticketSchema.addField({
-    venue: { type: 'string', required: false }, 
-    anotherField: { type: 'number' }
+    venue: new Field({ type: 'string', required: false }), 
+    anotherField: new Field({ type: 'number' })
 });
 ```
 
@@ -79,13 +80,13 @@ Required is now true by default.
 ```javascript
 var DataType = require('machiavelli').DataType;
 var ticketSchema = new Schema({
-    _id: { type: DataType.ObjectID },
-    title: { type: DataType.String }, 
-    price: { type: DataType.Integer, required: false }, 
-    createdAt: { type: DataType.Date},
+    _id: new Field({ type: DataType.ObjectID }),
+    title: new Field({ type: DataType.String }), 
+    price: new Field({ type: DataType.Integer, required: false }), 
+    createdAt: new Field({ type: DataType.Date}),
     owner: {
-        _id: { type: DataType.ObjectID },
-        username: { type: DataType.String }
+        _id: new Field({ type: DataType.ObjectID }),
+        username: new Field({ type: DataType.String })
     }
 });
 ```
@@ -146,17 +147,17 @@ functions.
 
 ```javascript
 var isPositive = function (price) { return price >= 0; };
-var smallerThanTen = { 
+var smallerThanTen = new Validator({ 
     validator: function(price) { return price < 10 },
     message: 'Value not smaller than 10'
-}
+});
 
 var coffeeSchema = new Schema({
-    flavor: { type: 'string', required: true },
-    price: { 
-        type: 'number', required: true, 
+    flavor: new Field({ type: 'string', required: true }),
+    price: new Field({ 
+        type: new Field('number', required: true), 
         validate: [isPostive, smallerThanTen] 
-    }
+    });
 });
 ```
 
