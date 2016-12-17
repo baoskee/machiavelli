@@ -117,8 +117,8 @@ DataType.Coordinate = new DataType(function (coord) {
     var longitude = coord[0];
     var latitude = coord[1];
     
-    return (longitude >= -180 || longitude <= -180) && 
-        (latitude >= -90 || latitude <= 90)
+    return (longitude >= -180 && longitude <= 180) && 
+        (latitude >= -90 && latitude <= 90)
 });
 ```
 
