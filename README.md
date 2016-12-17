@@ -150,6 +150,7 @@ as your validation function and error  as your error throwing object.
 
 ```javascript
 var isPositive = function (price) { return price >= 0; };
+var Validator = Schema.Validator;
 var smallerThanTen = new Validator({ 
     isValid: function(price) { return price < 10 },
     error: new Error('Value not smaller than 10')
