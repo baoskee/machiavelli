@@ -6,13 +6,15 @@ Lightweight application-level schema for Javascript models.
 
 
 ## Why not Mongoose or another ORM
-ORMs don't cover completely the features that the Official Node.js 
-Driver have. Many ORMs, Mongoose in particular, are slow vs. the 
-official driver and are more prone to bugs.
+ORMs don't cover completely the features that the official drivers 
+have. Furthermore, ORMs are notorious for being slow compared to 
+official drivers, and tend to be irregularly maintained as time
+goes on to be more prone to bugs.
 
 This module is made for those who are frustrated by reading two docs 
-to communicate with one database. By separating the Schema from the 
-ORM, we are adhering to the Node.js philosophy of modularization.
+to communicate with one database. Having a separate Schema from built-in
+database schemas can be advantageous; data can be validated  directly 
+from your application instead of unnecessarily over network requests.
 
 ## Getting Started
 
@@ -46,15 +48,6 @@ postingSchema.validate(posting, function (err) {
 });
 ```
 
-### Custom validators 
-```javascript
-var is_positive = function (price) { return price >= 0; };
-var coffeeSchema = new Schema({
-    flavor: { type: 'string', required: true },
-    price: { type: 'number', required: true, validate: [is_positive] }
-});
-```
-
 ### Schema inheritance
 The inherits method need to be declared after schema declaration. 
 Will not overwrite existing fields, but will inherit validation 
@@ -62,44 +55,23 @@ requirements of other fields.
 
 ```javascript
 var ticketSchema = new Schema({ 
-    artist: { type: 'string', required: true }
+    artist: { type: 'string' }
 });
 ticketSchema.inherits(postingSchema);
 ```
 
-
-## Why use a Schema at all
-Light-weight schemas can provide another protection layer for malicious
-database injections.
-
-## Using Schema in Express middleware for modularizing logic
+### Extending schemas
+A schema can be extended with new fields using the method addField() 
 ```javascript
-var app = require('express')();
-var authenticationSchema = new Schema({
-  username: { type: 'string', required: true },
-  password: { type: 'string', required: true }
-});
-
-/*
- * Middleware to check validity of input,
- * allow customization of error message and
- * status code for each type of failure
- */ 
- 
-app.use(function (err, req, res, next) {
-  authenticationSchema.validate({ 
-    username: req.body.username,
-    password: req.body.password
-  }, function (err) {
-    if (err) return res.status(401).json({
-      type: 'validation_error',
-      message: err
-    });
-
-    next();
-  });
+ticketSchema.addField({
+    venue: { type: 'string', required: false }, 
+    anotherField: { type: 'number' }
 });
 ```
+
+### Why use a Schema at all
+Light-weight schemas can provide another protection layer for malicious
+database injections.
 
 ## Using DataType
 Required is now true by default. 
@@ -118,6 +90,7 @@ var ticketSchema = new Schema({
 });
 ```
 
+
 ### Machiavelli-Defined Types
 * Function
 * String
@@ -125,22 +98,20 @@ var ticketSchema = new Schema({
 * Double
 * Date
 * Boolean
-
-## To be implemented
 * Array
-* Object
 
 ### Defining new data types
 Defining new dataType from MongoDB's ObjectID. Simply define a function
 that returns true if object is of type data type, else returns false.
 
 ```javascript
-DataType.ObjectID = new DataType(function (data) {
-    
+var ObjectID = require('mongodb').ObjectID;
+DataType.ObjectID = new DataType(function (val) {
+    return val instanceof ObjectID;
 }); 
 ```
 
-Here we define a new DataType called Coordinate 
+Here we define a new DataType called Coordinate.
 ```javascript
 DataType.Coordinate = new DataType(function (coord) {
     var longitude = coord[0];
@@ -151,13 +122,42 @@ DataType.Coordinate = new DataType(function (coord) {
 });
 ```
 
-## Error messages
+## Error Types (To be implemented)
 The Schema comes with flexible error messages, customizable from
 the structure of the error object, to the error returned at
 each stage of the Schema verification process.
 
 ```javascript 
+var ErrorType = require('machievelli').ErrorType;
+```
 
+## Optional arguments
+We have seen the the 'required' field, a boolean determining 
+if Schema should fail if the field is not specified. Specifying the 
+'required' field, unlike the 'type' field, is optional since the 
+default is set to true. There are many other arguments we could use to
+enhance our schema.
+
+### validate - Custom validators 
+Functions specified under the validate argument should return a boolean
+that specifies whether or not the data is valid. Custom validators can 
+be objects of form { validator: Function, message: String } instead of 
+functions.
+
+```javascript
+var isPositive = function (price) { return price >= 0; };
+var smallerThanTen = { 
+    validator: function(price) { return price < 10 },
+    message: 'Value not smaller than 10'
+}
+
+var coffeeSchema = new Schema({
+    flavor: { type: 'string', required: true },
+    price: { 
+        type: 'number', required: true, 
+        validate: [isPostive, smallerThanTen] 
+    }
+});
 ```
 
 ## Future contribution ideas
