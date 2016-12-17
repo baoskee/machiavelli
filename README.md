@@ -101,9 +101,66 @@ app.use(function (err, req, res, next) {
 });
 ```
 
+## Using DataType
+Required is now true by default. 
+
+```javascript
+var DataType = require('machiavelli').DataType;
+var ticketSchema = new Schema({
+    _id: { type: DataType.ObjectID },
+    title: { type: DataType.String }, 
+    price: { type: DataType.Integer, required: false }, 
+    createdAt: { type: DataType.Date},
+    owner: {
+        _id: { type: DataType.ObjectID },
+        username: { type: DataType.String }
+    }
+});
+```
+
+### Machiavelli-Defined Types
+* Function
+* String
+* Integer
+* Double
+* Date
+* Boolean
+
+## To be implemented
+* Array
+* Object
+
+### Defining new data types
+Defining new dataType from MongoDB's ObjectID. Simply define a function
+that returns true if object is of type data type, else returns false.
+
+```javascript
+DataType.ObjectID = new DataType(function (data) {
+    
+}); 
+```
+
+Here we define a new DataType called Coordinate 
+```javascript
+DataType.Coordinate = new DataType(function (coord) {
+    var longitude = coord[0];
+    var latitude = coord[1];
+    
+    return (longitude >= -180 || longitude <= -180) && 
+        (latitude >= -90 || latitude <= 90)
+});
+```
+
+## Error messages
+The Schema comes with flexible error messages, customizable from
+the structure of the error object, to the error returned at
+each stage of the Schema verification process.
+
+```javascript 
+
+```
+
 ## Future contribution ideas
-1. More specific types, like Date, Integer.
-2. More tests, please.
-3. Custom error messages for custom validator functions.
-4. Custom error messages for required validation.
-5. Custom error messages for type validation.
+1. Validation of nested objects.
+2. More flexible data types, and creating new data types.
+3. Custom error messages.
