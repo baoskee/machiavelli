@@ -170,8 +170,3 @@ Why so many constructors? While JavaScript is a dynamically-typed
 language, it can be extremely beneficial to separate concerns by
 using constructors as dependency injections. Hacking JavaScript
 can be both fast AND reliable!
-
-## Future contribution ideas
-1. Validation of nested objects.
-2. More flexible data types, and creating new data types.
-3. Custom error messages.
