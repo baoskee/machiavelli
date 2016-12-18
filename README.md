@@ -122,15 +122,19 @@ DataType.Coordinate = new DataType(function (coord) {
 ### Your own wrappers
 If your data is already wrapped in your own constructor, there
 is no need to define a new function. 
+
 ```javascript
-// TODO: Demonstrate example.
+var Animal = function (specie) { this.specie = specie }
+var zooSchema = new Schema({ 
+    animal: new Field({ type: Animal })
+});
 ```
 
-### Collection Validation
-DataType.collectionIsValid() validates type on a collection level
+### Collection Validation (To be implemented)
+DataType.isValidCollection() validates type on a collection level
 
 ```javascript
-// TODO: Demonstrate example.s
+// TODO: Demonstrate example
 ```
 
 

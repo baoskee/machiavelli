@@ -9,7 +9,6 @@ describe('Schema', function () {
   /*
    * Test data
    */
-
   var valid_user = {
     username: 'baoser',
     password: 'foobar',
@@ -50,7 +49,7 @@ describe('Schema', function () {
     userSchema = new Schema({
       username: new Field({ type: String }),
       password: new Field({ type: String }),
-      email: new Field({ type: String, required: true })
+      email: new Field({ type: String })
     });
 
     postingSchema = new Schema({
@@ -59,7 +58,7 @@ describe('Schema', function () {
       description: new Field({ type: String, required: false })
     });
     ticketSchema = new Schema({
-      artist: new Field({ type: String})
+      artist: new Field({ type: String })
     });
     ticketSchema.inherits(postingSchema);
     done();
