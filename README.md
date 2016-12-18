@@ -141,7 +141,7 @@ if Schema should fail if the field is not specified. Specifying the
 default is set to true. There are many other arguments we could use to
 enhance our schema.
 
-### validate - Custom validators
+### validators - Custom validators
 The argument to 'validate' should always be in an array, even if it
 only contains one element. 
 
@@ -162,7 +162,7 @@ var coffeeSchema = new Schema({
     flavor: new Field({ type: String }),
     price: new Field({ 
         type: Number,
-        validate: [isPostive, smallerThanTen] 
+        validators: [isPostive, smallerThanTen] 
     });
 });
 ```

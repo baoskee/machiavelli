@@ -3,12 +3,13 @@ var Field = require('../index').Schema.Field;
 var DataType = require('../index').DataType;
 
 describe('Field', function () {
+  var typeError = 'Field input does not conform to data type';
+  var requiredError = 'Missing required field';
 
   describe('type:', function () {
     var strField = new Field({ type: String });
     var boolField = new Field({ type: Boolean });
     var numField = new Field({ type: Number });
-    var typeError = 'Field input does not conform to data type';
 
     it('should pass if type correct', function (done) {
       numField.validateThrow(2);
@@ -51,22 +52,30 @@ describe('Field', function () {
 
   describe('required:', function () {
     var numField = new Field({ type: Number });
-    var requiredError = 'Missing required field';
 
     it('should be true by default', function () {
       expect(function () {numField.validateThrow(undefined)}).to.throw(requiredError);
-      try {
-        numField.validateThrow(undefined);
-      } catch (err) {
-        console.log(err);
-      }
-
     });
 
     describe('when false', function () {
-      it('should not throw error if field not present');
-      it('should still type validate if field present');
-      it('should still custom validate if field present');
+      var isPositive = function (num) { return num > 0 };
+      var positiveField = new Field({ type: Number, required: false, validators: [isPositive] });
+
+      it('should not throw error if field not present', function (done) {
+        positiveField.validateThrow(undefined);
+        done();
+      });
+
+      it('should still type validate if field present', function (done) {
+        positiveField.validateThrow(2);
+        expect(function () {positiveField.validateThrow('')}).to.throw(typeError);
+        done();
+      });
+
+      it('should still custom validate if field present', function (done) {
+        expect(function () {positiveField.validateThrow(-12)}).to.throw('Custom validator failed');
+        done();
+      });
     });
   });
 
