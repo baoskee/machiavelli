@@ -1,4 +1,4 @@
 module.exports = {
-  Schema: require('./lib/schema-v2'),
+  Schema: require('./lib/schema'),
   DataType: require('./lib/datatype')
 };
