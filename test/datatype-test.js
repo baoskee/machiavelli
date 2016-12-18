@@ -7,7 +7,7 @@ describe('DataType specs', function () {
   describe('Using data types with Schema', function () {
     var animalSchema = new Schema({
       specie: {type: DataType.String},
-      habitats: {type: DataType.Array, validate: [DataType.String.collectionIsValid]},
+      habitats: {type: DataType.Array, validateThrow: [DataType.String.collectionIsValid]},
       stats: {
         avgWeight: {type: DataType.Double, required: false },
         avgLifeSpan: {type: DataType.Integer}
