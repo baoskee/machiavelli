@@ -1,5 +1,6 @@
 var assert = require('assert');
 var Schema = require('../index').Schema;
+var Field = Schema.Field;
 
 describe('Schema', function () {
   const ErrorMessage = {
@@ -50,24 +51,25 @@ describe('Schema', function () {
   var userSchema, postingSchema, ticketSchema;
   before(function (done) {
     userSchema = new Schema({
-      username: { type: 'string' },
-      password: { type: 'string' },
-      email: { type: 'string', required: true }
+      username: new Field({ type: String }),
+      password: new Field({ type: String }),
+      email: new Field({ type: String, required: true })
     });
+
     postingSchema = new Schema({
-      title: { type: 'string' },
-      price: { type: 'number', validateThrow: [is_positive] },
-      description: { type: 'string', required: false }
+      title: new Field({ type: String }),
+      price: new Field({ type: Number, validators: [is_positive] }),
+      description: new Field({ type: String, required: false })
     });
     ticketSchema = new Schema({
-      artist: { type: 'string' }
+      artist: new Field({ type: String })
     });
     ticketSchema.inherits(postingSchema);
     done();
   });
 
   it('should have two patterns of validation', function (done) {
-    userSchema.validateThrow(valid_user, function (err) {
+    userSchema.validate(valid_user, function (err) {
       assert.equal(err, null);
       assert(userSchema.isValid(valid_user));
       done();
@@ -75,7 +77,7 @@ describe('Schema', function () {
   });
 
   it('should fail if field is of wrong type', function (done) {
-    userSchema.validateThrow(wrong_type_user, function (err) {
+    userSchema.validate(wrong_type_user, function (err) {
       assert.notEqual(err, null);
       assert.equal(err.message, ErrorMessage.TYPE);
       assert(!userSchema.isValid(wrong_type_user));
@@ -84,7 +86,7 @@ describe('Schema', function () {
   });
 
   it('should fail if required field is missing', function (done) {
-    userSchema.validateThrow(missing_required_user, function (err) {
+    userSchema.validate(missing_required_user, function (err) {
       assert.notEqual(err, null);
       assert.equal(err.message, ErrorMessage.MISSING + 'email');
       assert(!userSchema.isValid(missing_required_user));
@@ -93,7 +95,7 @@ describe('Schema', function () {
   });
 
   it('should pass if non-required field is not specified', function (done) {
-    postingSchema.validateThrow(no_description_posting, function (err) {
+    postingSchema.validate(no_description_posting, function (err) {
       assert.equal(err, null);
       assert(postingSchema.isValid(no_description_posting));
       done();
@@ -101,7 +103,7 @@ describe('Schema', function () {
   });
 
   it('should fail if custom function failed', function (done) {
-    postingSchema.validateThrow(negative_price_posting, function (err) {
+    postingSchema.validate(negative_price_posting, function (err) {
       assert.notEqual(err, null);
       assert.equal(err.message, ErrorMessage.CUSTOM);
       assert(!postingSchema.isValid(negative_price_posting));
@@ -110,7 +112,7 @@ describe('Schema', function () {
   });
 
   it('should be able to inherit another schema', function (done) {
-    ticketSchema.validateThrow(valid_ticket, function (err) {
+    ticketSchema.validate(valid_ticket, function (err) {
       assert.equal(err, null);
       assert(!ticketSchema.isValid(no_description_posting));
       assert(!ticketSchema.isValid(negative_price_posting));
