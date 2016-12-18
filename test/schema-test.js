@@ -4,9 +4,9 @@ var Field = Schema.Field;
 
 describe('Schema', function () {
   const ErrorMessage = {
-    TYPE: 'Invalid type',
+    TYPE: 'Field input does not conform to data type',
     CUSTOM: 'Custom validator failed',
-    MISSING: 'Missing field: ' /* with custom field name */
+    MISSING: 'Missing required field' /* with custom field name */
   };
 
   /*
@@ -62,7 +62,7 @@ describe('Schema', function () {
       description: new Field({ type: String, required: false })
     });
     ticketSchema = new Schema({
-      artist: new Field({ type: String })
+      artist: new Field({ type: String})
     });
     ticketSchema.inherits(postingSchema);
     done();
@@ -88,7 +88,7 @@ describe('Schema', function () {
   it('should fail if required field is missing', function (done) {
     userSchema.validate(missing_required_user, function (err) {
       assert.notEqual(err, null);
-      assert.equal(err.message, ErrorMessage.MISSING + 'email');
+      assert.equal(err.message, ErrorMessage.MISSING);
       assert(!userSchema.isValid(missing_required_user));
       done();
     });
