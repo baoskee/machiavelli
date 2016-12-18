@@ -134,7 +134,7 @@ DataType.collectionIsValid() validates type on a collection level
 ```
 
 
-## Optional arguments
+## Optional keys
 We have seen the the 'required' field, a boolean determining 
 if Schema should fail if the field is not specified. Specifying the 
 'required' field, unlike the 'type' field, is optional since the 
@@ -175,7 +175,7 @@ the field in a document.
 Accessing the constructors from the module. They are organized less
 for accessibility than for logic. You will never need to use Validator
 without using Field, and never Field without using Schema. As for 
-DataType, I found it can be used without Schema in some applications.
+DataType, I found it can be used without Schema.
 
 ```javascript
 require('machivelli')
