@@ -1,23 +1,61 @@
 var DataType = require('../index').DataType;
 var Schema = require('../index').Schema;
+var Field = Schema.Field;
 var should = require('chai').should();
+var errorMessage = require('./util/errorMessage');
 
 describe('DataType specs', function () {
 
-  describe('Using data types with Schema', function () {
+  describe('using data types with Schema', function () {
     var animalSchema = new Schema({
-      specie: {type: DataType.String},
-      habitats: {type: DataType.Array, validateThrow: [DataType.String.collectionIsValid]},
+      specie: new Field({type: DataType.String}),
+      habitats: new Field({type: DataType.Array, validateThrow: [DataType.String.collectionIsValid]}),
       stats: {
-        avgWeight: {type: DataType.Double, required: false },
-        avgLifeSpan: {type: DataType.Integer}
+        avgWeight: new Field({type: DataType.Double, required: false }),
+        avgLifeSpan: new Field({type: DataType.Integer})
       }
+    });
+
+    var cat;
+    beforeEach(function (done) {
+      /* confirms correctly to animalSchema */
+      cat = {
+        specie: 'feline',
+        habitats: ['jungle','house'],
+        stats: {
+          avgWeight: 20,
+          avgLifeSpan: 10
+        }
+      };
+      done();
     });
 
     it('should verify value according to type');
     it('should fail if custom validator failed');
     it('should not fail if required is set to false and field does not exist');
-    it('should verify nested values');
+
+    /**
+    describe('nested values validation should', function () {
+      it('verify avgLifeSpan correctly', function (done) {
+        animalSchema.validate(cat, function (err) {
+          if (err) throw err;
+
+          animalSchema.isValid(cat).should.equal(true);
+          done();
+        });
+      });
+
+      it('verify type correctly', function (done) {
+        cat.stats.avgLifeSpan = 'wrongType';
+        animalSchema.validate(cat, function (err) {
+          err.message.should.equal(errorMessage.TYPE);
+
+          animalSchema.isValid(cat).should.equal(false);
+          done();
+        });
+      });
+    });
+    **/
   });
 
   describe('Defining custom data types', function () {
