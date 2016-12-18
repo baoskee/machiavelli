@@ -1,10 +1,12 @@
 var expect = require('chai').expect;
 var Field = require('../index').Schema.Field;
 var DataType = require('../index').DataType;
+var Validator = Field.Validator;
 
 describe('Field', function () {
   var typeError = 'Field input does not conform to data type';
   var requiredError = 'Missing required field';
+  var customValidatorError = 'Custom validator failed';
 
   describe('type:', function () {
     var strField = new Field({ type: String });
@@ -16,7 +18,7 @@ describe('Field', function () {
       numField.validateThrow(new Number(1));
       boolField.validateThrow(false);
       boolField.validateThrow(new Boolean(true));
-      strField.validateThrow('');
+      strField.validateThrow('aws');
       strField.validateThrow(new String('hello'));
       done();
     });
@@ -73,19 +75,41 @@ describe('Field', function () {
       });
 
       it('should still custom validate if field present', function (done) {
-        expect(function () {positiveField.validateThrow(-12)}).to.throw('Custom validator failed');
+        expect(function () {positiveField.validateThrow(-12)}).to.throw(customValidatorError);
         done();
       });
     });
   });
 
   describe('validate:', function () {
-    it('should fail if one of validator function fails');
-    it('should pass if all validator function passes');
+    var underTwenty = function (num) { return num < 20; };
+    var overFive = function (num) { return num > 5; };
+    var numField = new Field({ type: Number, validators: [overFive, underTwenty] });
+
+    it('should fail if one of validator function fails', function (done) {
+      numField.validateThrow(10);
+      expect(function () {numField.validateThrow(25)}).to.throw(customValidatorError);
+      expect(function () {numField.validateThrow(1)}).to.throw(customValidatorError);
+      done();
+    });
 
     describe('custom validator object', function () {
-      it('should fail with custom error message');
-      it('should pass for correct case');
+      var longerFive = new Validator({
+        isValid: function (str) { return str.length > 5; },
+        error: 'String length is less than 5'
+      });
+      var strField = new Field({ type: String, validators: [longerFive] });
+
+      it('should fail with custom error message', function (done) {
+        strField.validateThrow('Long string long string.');
+        expect(function () {strField.validateThrow('thr')}).to.throw(longerFive.error);
+        done();
+      });
+
+      it('should pass for correct case', function (done) {
+        strField.validateThrow('Long string long string.');
+        done();
+      });
     });
 
   });
