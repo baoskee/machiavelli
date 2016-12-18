@@ -1,7 +1,9 @@
 var expect = require('chai').expect;
 var Field = require('../index').Schema.Field;
+var DataType = require('../index').DataType;
 
 describe('Field', function () {
+
   describe('type:', function () {
     var strField = new Field({ type: String });
     var boolField = new Field({ type: Boolean });
@@ -31,10 +33,17 @@ describe('Field', function () {
     describe('custom data types', function () {
       var Animal = function (specie) { this.specie = specie };
       var animalField = new Field({ type: Animal });
-      it('should work for native constructor', function (done) {
+      var integerField = new Field({ type: DataType.Integer });
+
+      it('should work with native constructor functions', function (done) {
+        animalField.validateThrow(new Animal('cat'));
+        expect(function () {animalField.validateThrow(new Date())}).to.throw(typeError);
         done();
       });
-      it('should work for custom DataType', function (done) {
+
+      it('should work with DataType', function (done) {
+        integerField.validateThrow(2);
+        expect(function () {integerField.validateThrow(12.121)}).to.throw(typeError);
         done();
       });
     });
