@@ -8,8 +8,8 @@ describe('DataType specs', function () {
 
   describe('using data types with Schema', function () {
     var animalSchema = new Schema({
-      specie: new Field({type: DataType.String}),
-      habitats: new Field({type: DataType.Array, validateThrow: [DataType.String.collectionIsValid]}),
+      // specie: new Field({type: DataType.String})
+      habitats: new Field({type: DataType.Array /* validators: [DataType.String.collectionIsValid] */ }),
       stats: {
         avgWeight: new Field({type: DataType.Double, required: false }),
         avgLifeSpan: new Field({type: DataType.Integer})
@@ -30,11 +30,18 @@ describe('DataType specs', function () {
       done();
     });
 
-    it('should verify value according to type');
-    it('should fail if custom validator failed');
+    // it('using collectionIsValid should use isValid for every member', function (done) {
+    //   cat.habitats.push(3); // false member
+    //   animalSchema.validate(cat, function (err) {
+    //     err.message.should.equal(errorMessage.CUSTOM);
+    //
+    //     animalSchema.isValid(cat).should.equal(false);
+    //     done();
+    //   });
+    // });
+
     it('should not fail if required is set to false and field does not exist');
 
-    /**
     describe('nested values validation should', function () {
       it('verify avgLifeSpan correctly', function (done) {
         animalSchema.validate(cat, function (err) {
@@ -55,7 +62,7 @@ describe('DataType specs', function () {
         });
       });
     });
-    **/
+
   });
 
   describe('Defining custom data types', function () {
