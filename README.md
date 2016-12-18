@@ -122,15 +122,17 @@ DataType.Coordinate = new DataType(function (coord) {
 ### Your own wrappers
 If your data is already wrapped in your own constructor, there
 is no need to define a new function. 
-
-## Error Types (To be implemented)
-The Schema comes with flexible error messages, customizable from
-the structure of the error object, to the error returned at
-each stage of the Schema verification process.
-
-```javascript 
-var ErrorType = require('machievelli').ErrorType;
+```javascript
+// TODO: Demonstrate example.
 ```
+
+### Collection Validation
+DataType.collectionIsValid() validates type on a collection level
+
+```javascript
+// TODO: Demonstrate example.s
+```
+
 
 ## Optional arguments
 We have seen the the 'required' field, a boolean determining 
@@ -165,6 +167,10 @@ var coffeeSchema = new Schema({
     });
 });
 ```
+
+### required - Default is true
+Specify required to be false if you want the Schema to not require
+the field in a document.
 
 ## Philosophy
 Why so many constructors? While JavaScript is a dynamically-typed 
