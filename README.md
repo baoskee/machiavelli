@@ -25,9 +25,9 @@ validation.
 var Schema = require('machiavelli').Schema
 var Field = Schema.Field;
 var postingSchema = new Schema({
-    title: new Field({ type: String, required: true }),
-    price: new Field({ type: Number, required: true }),
-    description: new Field({ type: String })
+    title: new Field({ type: String }),
+    price: new Field({ type: Number }),
+    description: new Field({ type: String, required: false })
 });
 ```
 
