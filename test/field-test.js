@@ -50,7 +50,19 @@ describe('Field', function () {
   });
 
   describe('required:', function () {
-    it('should be true by default');
+    var numField = new Field({ type: Number });
+    var requiredError = 'Missing required field';
+
+    it('should be true by default', function () {
+      expect(function () {numField.validateThrow(undefined)}).to.throw(requiredError);
+      try {
+        numField.validateThrow(undefined);
+      } catch (err) {
+        console.log(err);
+      }
+
+    });
+
     describe('when false', function () {
       it('should not throw error if field not present');
       it('should still type validate if field present');
