@@ -5,65 +5,7 @@ var should = require('chai').should();
 var errorMessage = require('./util/errorMessage');
 
 describe('DataType specs', function () {
-
-  describe('using data types with Schema', function () {
-    var animalSchema = new Schema({
-      // specie: new Field({type: DataType.String})
-      habitats: new Field({type: DataType.Array /* validators: [DataType.String.collectionIsValid] */ }),
-      stats: {
-        avgWeight: new Field({type: DataType.Double, required: false }),
-        avgLifeSpan: new Field({type: DataType.Integer})
-      }
-    });
-
-    var cat;
-    beforeEach(function (done) {
-      /* confirms correctly to animalSchema */
-      cat = {
-        specie: 'feline',
-        habitats: ['jungle','house'],
-        stats: {
-          avgWeight: 20,
-          avgLifeSpan: 10
-        }
-      };
-      done();
-    });
-
-    // it('using collectionIsValid should use isValid for every member', function (done) {
-    //   cat.habitats.push(3); // false member
-    //   animalSchema.validate(cat, function (err) {
-    //     err.message.should.equal(errorMessage.CUSTOM);
-    //
-    //     animalSchema.isValid(cat).should.equal(false);
-    //     done();
-    //   });
-    // });
-
-    it('should not fail if required is set to false and field does not exist');
-
-    describe('nested values validation should', function () {
-      it('verify avgLifeSpan correctly', function (done) {
-        animalSchema.validate(cat, function (err) {
-          if (err) throw err;
-
-          animalSchema.isValid(cat).should.equal(true);
-          done();
-        });
-      });
-
-      it('verify type correctly', function (done) {
-        cat.stats.avgLifeSpan = 'wrongType';
-        animalSchema.validate(cat, function (err) {
-          err.message.should.equal(errorMessage.TYPE);
-
-          animalSchema.isValid(cat).should.equal(false);
-          done();
-        });
-      });
-    });
-
-  });
+  
 
   describe('Defining custom data types', function () {
     DataType.Coordinate = new DataType(function (coord) {

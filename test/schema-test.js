@@ -1,13 +1,10 @@
 var assert = require('assert');
 var Schema = require('../index').Schema;
+var DataType = require('../index').DataType;
 var Field = Schema.Field;
+var errorMessage = require('./util/errorMessage');
 
 describe('Schema', function () {
-  const ErrorMessage = {
-    TYPE: 'Field input does not conform to data type',
-    CUSTOM: 'Custom validator failed',
-    MISSING: 'Missing required field' /* with custom field name */
-  };
 
   /*
    * Test data
@@ -79,7 +76,7 @@ describe('Schema', function () {
   it('should fail if field is of wrong type', function (done) {
     userSchema.validate(wrong_type_user, function (err) {
       assert.notEqual(err, null);
-      assert.equal(err.message, ErrorMessage.TYPE);
+      assert.equal(err.message, errorMessage.TYPE);
       assert(!userSchema.isValid(wrong_type_user));
       done();
     });
@@ -88,7 +85,7 @@ describe('Schema', function () {
   it('should fail if required field is missing', function (done) {
     userSchema.validate(missing_required_user, function (err) {
       assert.notEqual(err, null);
-      assert.equal(err.message, ErrorMessage.MISSING);
+      assert.equal(err.message, errorMessage.MISSING);
       assert(!userSchema.isValid(missing_required_user));
       done();
     });
@@ -105,7 +102,7 @@ describe('Schema', function () {
   it('should fail if custom function failed', function (done) {
     postingSchema.validate(negative_price_posting, function (err) {
       assert.notEqual(err, null);
-      assert.equal(err.message, ErrorMessage.CUSTOM);
+      assert.equal(err.message, errorMessage.CUSTOM);
       assert(!postingSchema.isValid(negative_price_posting));
       done();
     });
@@ -122,5 +119,62 @@ describe('Schema', function () {
   });
 
   it('should not override existing attributes in inheritance');
+
+  describe('using nested validation', function () {
+    var animalSchema = new Schema({
+      specie: new Field({type: DataType.String}),
+      habitats: new Field({type: DataType.Array /* , validators: [DataType.String.collectionIsValid] */ }),
+      stats: {
+        avgWeight: new Field({type: DataType.Double, required: false }),
+        avgLifeSpan: new Field({type: DataType.Integer})
+      }
+    });
+
+    var cat;
+    beforeEach(function (done) {
+      /* confirms correctly to animalSchema */
+      cat = {
+        specie: 'feline',
+        habitats: ['jungle','house'],
+        stats: {
+          avgWeight: 20,
+          avgLifeSpan: 10
+        }
+      };
+      done();
+    });
+
+    // Not working
+    it.skip('using collectionIsValid should use isValid for every member', function (done) {
+      cat.habitats.push(3); // false member
+      animalSchema.validate(cat, function (err) {
+        err.message.should.equal(errorMessage.CUSTOM);
+
+        animalSchema.isValid(cat).should.equal(false);
+        done();
+      });
+    });
+
+    describe('nested values validation should', function () {
+      it('verify avgLifeSpan correctly', function (done) {
+        animalSchema.validate(cat, function (err) {
+          if (err) throw err;
+
+          animalSchema.isValid(cat).should.equal(true);
+          done();
+        });
+      });
+
+      it('verify type correctly', function (done) {
+        cat.stats.avgLifeSpan = 'wrongType';
+        animalSchema.validate(cat, function (err) {
+          err.message.should.equal(errorMessage.TYPE);
+
+          animalSchema.isValid(cat).should.equal(false);
+          done();
+        });
+      });
+    });
+  });
 });
 
