@@ -67,7 +67,7 @@ ticketSchema.inherits(postingSchema);
 ### Extending schemas
 A schema can be extended with new fields using the method addField() 
 ```javascript
-ticketSchema.addField({
+ticketSchema.add({
     venue: new Field({ type: String, required: false }), 
     anotherField: new Field({ type: Number })
 });
@@ -152,17 +152,16 @@ as your validation function and error  as your error throwing object.
 
 ```javascript
 var isPositive = function (price) { return price >= 0; };
-var Validator = Schema.Validator;
+var Validator = Field.Validator;
 var smallerThanTen = new Validator({ 
     isValid: function(price) { return price < 10 },
     error: new Error('Value not smaller than 10')
 });
 
 var coffeeSchema = new Schema({
-    flavor: new Field({ type: String, required: true }),
+    flavor: new Field({ type: String }),
     price: new Field({ 
         type: Number,
-        required: true,
         validate: [isPostive, smallerThanTen] 
     });
 });
@@ -171,6 +170,21 @@ var coffeeSchema = new Schema({
 ### required - Default is true
 Specify required to be false if you want the Schema to not require
 the field in a document.
+
+### Constructor tree
+Accessing the constructors from the module. They are organized less
+for accessibility than for logic. You will never need to use Validator
+without using Field, and never Field without using Schema. As for 
+DataType, I found it can be used without Schema in some applications.
+
+```javascript
+require('machivelli')
+    .Schema
+        .Field
+            .Validator
+    .DataType
+```
+
 
 ## Philosophy
 Why so many constructors? While JavaScript is a dynamically-typed 
