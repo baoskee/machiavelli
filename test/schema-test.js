@@ -65,9 +65,12 @@ describe('Schema', function () {
   });
 
   it('should have two patterns of validation', function (done) {
-    userSchema.validate(valid_user, function (err) {
+    userSchema.validate(valid_user, function (err, user) {
       assert.equal(err, null);
       assert(userSchema.isValid(valid_user));
+      user.username.should.equal(valid_user.username);
+      user.email.should.equal(valid_user.email);
+      user.password.should.equal(valid_user.password);
       done();
     });
   });
@@ -91,9 +94,12 @@ describe('Schema', function () {
   });
 
   it('should pass if non-required field is not specified', function (done) {
-    postingSchema.validate(no_description_posting, function (err) {
+    postingSchema.validate(no_description_posting, function (err, posting) {
       assert.equal(err, null);
       assert(postingSchema.isValid(no_description_posting));
+      posting.title.should.equal(no_description_posting.title);
+      posting.price.should.equal(no_description_posting.price);
+      posting.hasOwnProperty('description').should.equal(false);
       done();
     });
   });
