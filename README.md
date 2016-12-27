@@ -43,11 +43,13 @@ if (postingSchema.isValid(postingDocument)) {
 
 ### Asynchronous validation
 ```javascript
-postingSchema.validate(posting, function (err) {
+postingSchema.validate(posting, function (err, capturedPosting) {
     if (err) {
         /* handle error */
     } else {
-        /* save posting to database */
+        /* save posting to database, 
+         * note that capturedPosting will have only the attributes
+         * specified in the schema */
     }
 });
 ```
@@ -174,6 +176,10 @@ var coffeeSchema = new Schema({
 ### required - Default is true
 Specify required to be false if you want the Schema to not require
 the field in a document.
+
+### default
+Specify default value for capture function to pass in second argument
+of validate.
 
 ### Constructor tree
 Accessing the constructors from the module. They are organized less
