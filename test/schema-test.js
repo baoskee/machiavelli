@@ -169,7 +169,7 @@ describe('Schema', function () {
           done();
         });
       });
-
+      
       it('verify type correctly', function (done) {
         cat.stats.avgLifeSpan = 'wrongType';
         animalSchema.validate(cat, function (err) {

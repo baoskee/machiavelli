@@ -3,7 +3,6 @@ var DataType = require('../index').DataType;
 var Field = Schema.Field;
 var should = require('chai').should();
 var errorMessage = require('./util/errorMessage');
-var ObjectID = require('mongodb').ObjectID;
 
 describe('Schema method', function () {
 
@@ -19,6 +18,19 @@ describe('Schema method', function () {
       captured.attributeTwo.should.equal('what');
       should.not.exist(captured.other);
       done();
+    });
+
+    var optionalSchema = new Schema({
+      one: new Field({ type: Number, required: false }),
+      two: new Field({ type: String, required: false })
+    });
+    describe('with optional fields', function () {
+      it('should only return if they exist', function (done) {
+        var captured = optionalSchema.capture({ two: 'hello' });
+        captured.hasOwnProperty('one').should.equal(false);
+        captured.two.should.equal('hello');
+        done();
+      });
     });
 
     describe('nested validation', function () {
