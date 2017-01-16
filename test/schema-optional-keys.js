@@ -1,5 +1,4 @@
 var Schema = require('../index').Schema;
-var DataType = require('../index').DataType;
 var Field = Schema.Field;
 var should = require('chai').should();
 
@@ -14,6 +13,7 @@ describe('Optional field keys', function () {
       animalSchema.validate({ name: 'cat' }, function (err, animal) {
         if (err) return done(err);
         animal.name.should.equal('dog');
+        animalSchema.isValid({}).should.equal(true);
         done();
       });
     });

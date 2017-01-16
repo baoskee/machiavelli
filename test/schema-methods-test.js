@@ -46,7 +46,7 @@ describe('Schema method', function () {
           age: new Field({type: DataType.Integer, required: false})
         }
       });
-
+      
       it('should work with doubly nested', function (done) {
         var captured = bookSchema.capture({
           genre: 'Fiction',
