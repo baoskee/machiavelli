@@ -204,6 +204,16 @@ require('machivelli')
     .DataType
 ```
 
+## 2.0.4
+
+### Nested schemas
+Schemas can now specify attributes as nested schemas 
+```javascript
+var helloSchema = {
+    world: worldSchema
+}
+```
+
 
 ## Philosophy
 Why so many constructors? While JavaScript is a dynamically-typed 
