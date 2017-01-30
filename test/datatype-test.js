@@ -1,12 +1,9 @@
 var DataType = require('../index').DataType;
 var Schema = require('../index').Schema;
-var Field = Schema.Field;
 var should = require('chai').should();
 var errorMessage = require('./util/errorMessage');
 
 describe('DataType specs', function () {
-  
-
   describe('Defining custom data types', function () {
     DataType.Coordinate = new DataType(function (coord) {
       var longitude = coord[0];

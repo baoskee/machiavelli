@@ -132,11 +132,11 @@ var zooSchema = new Schema({
 });
 ```
 
-### Collection Validation (To be implemented)
+### Collection Validation @notImplemented
 DataType.isValidCollection() validates type on a collection level
 
 ```javascript
-// TODO: Demonstrate example
+
 ```
 
 
@@ -175,7 +175,16 @@ var coffeeSchema = new Schema({
 
 ### required - Default is true
 Specify required to be false if you want the Schema to not require
-the field in a document.
+the field in a document. If value passed to 'default' is a function,
+the schema will invocate the field's value at runtime.
+```javascript
+var dateSchema = new Schema({
+    date: new Field({
+       type: Number,
+       default: Date.now
+    });
+});
+```
 
 ### default
 Specify default value for capture function to pass in second argument
