@@ -125,6 +125,21 @@ describe('Schema', function () {
 
   it('should not override existing attributes in inheritance');
 
+  it('should allow nested schemas', function (done) {
+    var passSchema = new Schema({
+      firstUser: userSchema,
+      secondUser: userSchema
+    });
+
+    passSchema.isValid({ firstUser: valid_user, secondUser: missing_required_user }).should.equal(false);
+    passSchema.validate({ firstUser: valid_user, secondUser: valid_user }, function (err, pass) {
+      if (err) return done(err);
+      pass.firstUser.username.should.equal(valid_user.username);
+      pass.secondUser.username.should.equal(valid_user.username);
+      done();
+    });
+  });
+
   describe('using nested validation', function () {
     var animalSchema = new Schema({
       specie: new Field({type: DataType.String}),
