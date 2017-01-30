@@ -4,7 +4,7 @@
   "description": "Application-level schema.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test",
+    "test": "mocha --recursive test",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec"
   },
   "repository": {

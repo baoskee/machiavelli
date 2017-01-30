@@ -1,4 +1,4 @@
-var Schema = require('../index').Schema;
+var Schema = require('../../index').Schema;
 var Field = Schema.Field;
 var should = require('chai').should();
 

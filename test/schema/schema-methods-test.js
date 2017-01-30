@@ -1,8 +1,8 @@
-var Schema = require('../index').Schema;
-var DataType = require('../index').DataType;
+var Schema = require('../../index').Schema;
+var DataType = require('../../index').DataType;
 var Field = Schema.Field;
 var should = require('chai').should();
-var errorMessage = require('./util/errorMessage');
+var errorMessage = require('./../util/errorMessage');
 
 describe('Schema method', function () {
 
