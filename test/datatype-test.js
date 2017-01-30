@@ -1,7 +1,7 @@
 var DataType = require('../index').DataType;
 var Schema = require('../index').Schema;
 var should = require('chai').should();
-var errorMessage = require('./util/errorMessage');
+var errorMessage = require('./util/error-message');
 
 describe('DataType specs', function () {
   describe('Defining custom data types', function () {
