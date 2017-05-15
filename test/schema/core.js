@@ -123,7 +123,15 @@ describe('Schema', function () {
     });
   });
 
-  it('should not override existing attributes in inheritance');
+  it('should not override existing attributes in inheritance', function (done) {
+    var number = new Schema({ value: new Field({ type: Number }) });
+    var string = new Schema({ value: new Field({ type: String }) });
+    number.inherits(string);
+    number.isValid({ value: 200 }).should.equal(true);
+    number.isValid({ value: 'poop' }).should.equal(false);
+    string.isValid({ value: 'hello' }).should.equal(true);
+    done();
+  });
 
   it('should allow nested schemas', function (done) {
     var passSchema = new Schema({

@@ -27,7 +27,14 @@ var Field = Schema.Field;
 var postingSchema = new Schema({
     title: new Field({ type: String }),
     price: new Field({ type: Number }),
-    description: new Field({ type: String, required: false })
+    description: new Field({ type: String, required: false }),
+		owner: { 	
+			/* Machievelli supports nested validation, a rare but useful feature
+				 for Document-Oriented schemas. */
+			name: "John Doe",
+		  username: "johndoe",
+		  email: "johndoe@machiavelli.org"
+	  }
 });
 ```
 
@@ -130,13 +137,6 @@ var Animal = function (specie) { this.specie = specie }
 var zooSchema = new Schema({ 
     animal: new Field({ type: Animal })
 });
-```
-
-### Collection Validation @notImplemented
-DataType.isValidCollection() validates type on a collection level
-
-```javascript
-
 ```
 
 
